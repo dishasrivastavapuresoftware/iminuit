@@ -1,25 +1,35 @@
 name: Wheels
 
-on:
-  workflow_dispatch:
+on: [push]
 
 jobs:
   wheels:
-    name: Build ${{ matrix.py }} wheels on ${{ matrix.os }}
+    name: Build ${{ matrix.py }} wheels on ${{ matrix.os }}, ${{ matrix.arch }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        arch: [auto, aarch64]
         py: [cp36, cp37, cp38, cp39]
+        exclude:
+          - os: windows-latest
+            arch: aarch64
+          - os: macos-latest
+            arch: aarch64
       fail-fast: false
     env:
       CIBW_BUILD: ${{ matrix.py }}-*
+      CIBW_ARCHS_LINUX: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
 
       - uses: pypa/cibuildwheel@v2.0.0
+      
+      - uses: docker/setup-qemu-action@v1
+        if: ${{ matrix.arch == 'aarch64' }}
+        name: Set up QEMU
 
       - uses: actions/upload-artifact@v2
         with:
