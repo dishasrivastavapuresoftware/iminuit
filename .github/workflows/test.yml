@@ -42,7 +42,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        fetch-depth: 0
+        submodules: true
     - name: Set up QEMU
       id: qemu
       uses: docker/setup-qemu-action@v1
@@ -64,8 +64,8 @@ jobs:
             ${{ env.img }} \
             bash -exc '\
             source .env/bin/activate && \
-            #python -m pip install . && \
-            python setup.py install && \
+            python -m pip install . && \
+            #python setup.py install && \
             pip install pytest && \
             python -m pytest && \
             deactivate' 
