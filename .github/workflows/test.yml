@@ -65,6 +65,7 @@ jobs:
             bash -exc '\
             source .env/bin/activate && \
             #python -m pip install . && \
+            python setup.py install && \
             pip install pytest && \
             python -m pytest && \
             deactivate' 
