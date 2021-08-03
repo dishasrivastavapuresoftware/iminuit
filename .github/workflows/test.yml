@@ -68,5 +68,4 @@ jobs:
             pip install . && \
             pip install pytest && \
             python -m pytest && \
-            deactivate'
-© 2021 GitHub, Inc. 
+            deactivate' 
